@@ -1,6 +1,8 @@
 package ch.heig.sio.lab1.groupH;
 
 public final class Analyze {
+  public static final long RNG_SEED = 0x134DA73;
+
   public static void main(String[] args) {
     // TODO
     //  - Renommer le package ;
