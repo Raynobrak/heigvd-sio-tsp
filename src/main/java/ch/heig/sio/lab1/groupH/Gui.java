@@ -9,6 +9,7 @@ public final class Gui {
   public static void main(String[] args) {
     HeuristicComboItem[] heuristics = {
         new HeuristicComboItem("Canonical tour", new CanonicalTour()),
+            new HeuristicComboItem("Random tour", new RandomTour())
         // TODO: Add your heuristics here
     };
 

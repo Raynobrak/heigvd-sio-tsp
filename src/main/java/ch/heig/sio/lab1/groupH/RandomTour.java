@@ -40,7 +40,7 @@ public final class RandomTour implements ObservableTspConstructiveHeuristic {
         var insertionOrder = new ArrayList<Integer>();
         for(int i = 0; i < availableCities.length; ++i)
             insertionOrder.add(i);
-        Collections.shuffle(insertionOrder);
+        Collections.shuffle(insertionOrder, rng);
 
         int insertedCitiesCount = 0;
         var tourList = new ArrayList<Integer>();
@@ -61,24 +61,32 @@ public final class RandomTour implements ObservableTspConstructiveHeuristic {
                     if(next == insertedCitiesCount)
                         next = 0;
 
-                    var distance = data.getDistance(tour[current], tour[next]);
-                    var intermediateDistance1 = data.getDistance(tour[current], cityIndex);
-                    var intermediateDistance2 = data.getDistance(cityIndex, tour[next]);
+                    var distance = data.getDistance(tourList.get(current), tourList.get(next));
+                    var intermediateDistance1 = data.getDistance(tourList.get(current), cityIndex);
+                    var intermediateDistance2 = data.getDistance(cityIndex, tourList.get(next));
                     var cost = intermediateDistance1 + intermediateDistance2 - distance;
 
                     if(cost < smallestInsertionCost) {
                         smallestInsertionCost = cost;
                         currentBestInsertionIndex = i;
                     }
+
+
                 }
 
-
-
+                tourList.add(currentBestInsertionIndex, cityIndex);
+                length += smallestInsertionCost;
             }
 
             ++insertedCitiesCount;
         }
 
-        return null;
+
+
+        var tour = new int[data.getNumberOfCities()];
+        for(int i = 0; i < data.getNumberOfCities(); ++i)
+            tour[i] = tourList.get(i);
+        var result = new TspTour(data, tour, length);
+        return result;
     }
 }
