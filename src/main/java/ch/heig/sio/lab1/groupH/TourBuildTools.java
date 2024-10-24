@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class TourBuildTools {
 
     TourBuildTools() {}
-    
+
+    // Retourne le coût d'insertion du sommet "intermediate" entre les sommets first et second
     int getInsertionCost(int first, int second, int intermediate, TspData data) {
         int distance = data.getDistance(first, second);
         int intermediateDistance1 = data.getDistance(first, intermediate);
@@ -13,26 +14,21 @@ public class TourBuildTools {
         return intermediateDistance1 + intermediateDistance2 - distance;
     }
 
-    //Retourne le cout
+    // Insère la ville donné au meilleur endroit de la tournée et retourne la
+    // distance supplémentaire du détour.
     int insertNewCityAtBestIndex(int cityIndex, ArrayList<Integer> tourList, TspData data){
         int smallestInsertionCost = Integer.MAX_VALUE;
         int currentBestInsertionIndex = Integer.MAX_VALUE;
         int insertedCitiesCount = tourList.size();
 
-        for(int i = 0; i < insertedCitiesCount; ++i) {
-            var current = i;
-            var next = i + 1;
-            if(next == insertedCitiesCount)
-                next = 0;
+        // todo : changer ce parcours par un itérateur sur tourList
+        for(int current = 0; current < insertedCitiesCount; ++current) {
+            int next = (current + 1) % insertedCitiesCount;
 
-            var distance = data.getDistance(tourList.get(current), tourList.get(next));
-            var intermediateDistance1 = data.getDistance(tourList.get(current), cityIndex);
-            var intermediateDistance2 = data.getDistance(cityIndex, tourList.get(next));
-            var cost = intermediateDistance1 + intermediateDistance2 - distance;
-
+            int cost = getInsertionCost(tourList.get(current), tourList.get(next), cityIndex, data);
             if(cost < smallestInsertionCost) {
                 smallestInsertionCost = cost;
-                currentBestInsertionIndex = (i + 1) % insertedCitiesCount;
+                currentBestInsertionIndex = (current + 1) % insertedCitiesCount;
             }
         }
 
