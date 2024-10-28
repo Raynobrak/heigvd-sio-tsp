@@ -17,31 +17,47 @@ public final class ClosestInsertionTour implements ObservableTspConstructiveHeur
 
     @Override
     public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
-        final int citiesCount = data.getNumberOfCities();
+        
+        TourBuildTools tools = new TourBuildTools();
 
-        var closestCities = new ArrayList<ArrayList<Distance>>(citiesCount);
-        for(int city = 0; city < citiesCount; ++city) {
-            var newList = new ArrayList<Distance>(citiesCount);
-            for(int otherCity = 0; otherCity < citiesCount; ++otherCity)
-                newList.add(new Distance(otherCity, data.getDistance(city, otherCity)));
-            newList.sort(new Comparator<Distance>() {
-                @Override
-                public int compare(Distance lhs, Distance rhs) {
-                    // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-                    return lhs.distance() - rhs.distance();
-                }
-            });
+        Distance[] closestCity = new Distance[data.getNumberOfCities()];
+        boolean[] visited = new boolean[data.getNumberOfCities()];
+
+
+        var tourList = new ArrayList<Integer>();
+        int length = 0;
+
+        // Ajout du premier sommet
+        tourList.add(startCityIndex);
+        visited[startCityIndex] = true;
+
+        for(int i = 0; i < data.getNumberOfCities(); ++i) {
+            if(i == startCityIndex)
+                continue;
+
+            closestCity[i] = tools.getClosestCityOnTour(startCityIndex, data, visited);
         }
 
-        // todo : use an array instead
-        var insertionOrder = new ArrayList<Integer>();
-        for(int i = 0; i < citiesCount; ++i) {
-            if(insertionOrder.isEmpty())
-                insertionOrder.add(startCityIndex);
 
-            // todo : ajouter la ville la plus proche
+        for (int i = 0; i < data.getNumberOfCities() - 1; ++i) {
+            var nextCity = tools.getSmallestDistance(closestCity, visited);
+            visited[nextCity.cityIndex()] = true;
+
+            tools.updateClosestCity(nextCity.cityIndex(), data, visited, closestCity);
+
+            tools.insertNewCityAtBestIndex(nextCity.cityIndex(), tourList, data);
+
+            length += nextCity.distance();
+            observer.update(new TraversalIterator(tourList));
         }
 
-        return null;
+        // Création du tableau final de la tournée
+        var tour = new int[tourList.size()];
+        for(int i = 0; i < tour.length; ++i)
+            tour[i] = tourList.get(i);
+
+        return new TspTour(data, tour, length);
+
+
     }
 }

@@ -36,4 +36,52 @@ public class TourBuildTools {
 
         return smallestInsertionCost;
     }
+
+    Distance getClosestCityOnTour(int cityIndex, TspData data, boolean[] visited) {
+        int closestCity = -1;
+        int closestDistance = Integer.MAX_VALUE;
+
+        for(int i = 0; i < data.getNumberOfCities(); ++i) {
+            if(i == cityIndex || !visited[i])
+                continue;
+
+            int distance = data.getDistance(cityIndex, i);
+            if(distance < closestDistance) {
+                closestDistance = distance;
+                closestCity = i;
+            }
+        }
+
+        return new Distance(closestCity, closestDistance);
+    }
+
+    Distance getSmallestDistance(Distance[] distances, boolean[] visited)
+    {
+        int smallestDistance = Integer.MAX_VALUE;
+        int smallestIndex = -1;
+
+        for(int i = 0; i < distances.length; ++i) {
+            if(visited[i])
+                continue;
+
+            if(distances[i].distance() < smallestDistance) {
+                smallestDistance = distances[i].distance();
+                smallestIndex = i;
+            }
+        }
+
+        return new Distance(smallestIndex, smallestDistance);
+    }
+
+    void updateClosestCity(int addedCityIndex, TspData data, boolean[] visited, Distance[] closestCity) {
+        for(int i = 0; i < data.getNumberOfCities(); ++i) {
+            if(i == addedCityIndex || visited[i])
+                continue;
+
+            int distance = data.getDistance(addedCityIndex, i);
+            if(distance < closestCity[i].distance()) {
+                closestCity[i] = new Distance(addedCityIndex, distance);
+            }
+        }
+    }
 }
