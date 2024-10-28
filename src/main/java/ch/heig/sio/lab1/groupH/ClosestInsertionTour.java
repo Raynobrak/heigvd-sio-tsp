@@ -35,15 +35,15 @@ public final class ClosestInsertionTour implements ObservableTspConstructiveHeur
             if(i == startCityIndex)
                 continue;
 
-            closestCity[i] = tools.getClosestCityOnTour(startCityIndex, data, visited);
+            closestCity[i] = tools.getClosestCityOnTour(i, data, visited, false);
         }
 
 
         for (int i = 0; i < data.getNumberOfCities() - 1; ++i) {
-            var nextCity = tools.getSmallestDistance(closestCity, visited);
+            var nextCity = tools.getSmallestDistance(closestCity, visited, false);
             visited[nextCity.cityIndex()] = true;
 
-            tools.updateClosestCity(nextCity.cityIndex(), data, visited, closestCity);
+            tools.updateClosestCity(nextCity.cityIndex(), data, visited, closestCity, false);
 
             tools.insertNewCityAtBestIndex(nextCity.cityIndex(), tourList, data);
 
@@ -57,7 +57,5 @@ public final class ClosestInsertionTour implements ObservableTspConstructiveHeur
             tour[i] = tourList.get(i);
 
         return new TspTour(data, tour, length);
-
-
     }
 }

@@ -1,5 +1,7 @@
 package ch.heig.sio.lab1.groupH;
 
+import java.util.ArrayList;
+
 import ch.heig.sio.lab1.display.ObservableTspConstructiveHeuristic;
 import ch.heig.sio.lab1.display.TspHeuristicObserver;
 import ch.heig.sio.lab1.tsp.TspData;
@@ -13,6 +15,44 @@ public final class FurthestInsertionTour implements ObservableTspConstructiveHeu
 
     @Override
     public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
-        return null;
+        TourBuildTools tools = new TourBuildTools();
+
+        Distance[] closestCity = new Distance[data.getNumberOfCities()];
+        boolean[] visited = new boolean[data.getNumberOfCities()];
+
+
+        var tourList = new ArrayList<Integer>();
+        int length = 0;
+
+        // Ajout du premier sommet
+        tourList.add(startCityIndex);
+        visited[startCityIndex] = true;
+
+        for(int i = 0; i < data.getNumberOfCities(); ++i) {
+            if(i == startCityIndex)
+                continue;
+
+            closestCity[i] = tools.getClosestCityOnTour(i, data, visited, false);
+        }
+
+
+        for (int i = 0; i < data.getNumberOfCities() - 1; ++i) {
+            var nextCity = tools.getSmallestDistance(closestCity, visited, true);
+            visited[nextCity.cityIndex()] = true;
+
+            tools.updateClosestCity(nextCity.cityIndex(), data, visited, closestCity, false);
+
+            tools.insertNewCityAtBestIndex(nextCity.cityIndex(), tourList, data);
+
+            length += nextCity.distance();
+            observer.update(new TraversalIterator(tourList));
+        }
+
+        // Création du tableau final de la tournée
+        var tour = new int[tourList.size()];
+        for(int i = 0; i < tour.length; ++i)
+            tour[i] = tourList.get(i);
+
+        return new TspTour(data, tour, length);
     }
 }

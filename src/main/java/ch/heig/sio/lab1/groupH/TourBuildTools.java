@@ -37,49 +37,49 @@ public class TourBuildTools {
         return smallestInsertionCost;
     }
 
-    Distance getClosestCityOnTour(int cityIndex, TspData data, boolean[] visited) {
-        int closestCity = -1;
-        int closestDistance = Integer.MAX_VALUE;
+    Distance getClosestCityOnTour(int cityIndex, TspData data, boolean[] visited, boolean furthest) { //furthest ne sert à rien
+        int closestCityIndex = -1;
+        int closestCityDistance = furthest ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
         for(int i = 0; i < data.getNumberOfCities(); ++i) {
             if(i == cityIndex || !visited[i])
                 continue;
 
             int distance = data.getDistance(cityIndex, i);
-            if(distance < closestDistance) {
-                closestDistance = distance;
-                closestCity = i;
+            if(furthest && distance > closestCityDistance || !furthest && distance < closestCityDistance) {
+                closestCityDistance = distance;
+                closestCityIndex = i;
             }
         }
 
-        return new Distance(closestCity, closestDistance);
+        return new Distance(closestCityIndex, closestCityDistance);
     }
 
-    Distance getSmallestDistance(Distance[] distances, boolean[] visited)
+    Distance getSmallestDistance(Distance[] distances, boolean[] visited, boolean furthest)
     {
-        int smallestDistance = Integer.MAX_VALUE;
-        int smallestIndex = -1;
+        int smallestDistance = furthest ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        int smallestDistanceIndex = -1;
 
         for(int i = 0; i < distances.length; ++i) {
             if(visited[i])
                 continue;
 
-            if(distances[i].distance() < smallestDistance) {
+            if(furthest && distances[i].distance() > smallestDistance || !furthest && distances[i].distance() < smallestDistance) {
                 smallestDistance = distances[i].distance();
-                smallestIndex = i;
+                smallestDistanceIndex = i;
             }
         }
 
-        return new Distance(smallestIndex, smallestDistance);
+        return new Distance(smallestDistanceIndex, smallestDistance);
     }
 
-    void updateClosestCity(int addedCityIndex, TspData data, boolean[] visited, Distance[] closestCity) {
+    void updateClosestCity(int addedCityIndex, TspData data, boolean[] visited, Distance[] closestCity, boolean furthest) { //furthest ne sert à rien
         for(int i = 0; i < data.getNumberOfCities(); ++i) {
-            if(i == addedCityIndex || visited[i])
+            if(visited[i])
                 continue;
 
             int distance = data.getDistance(addedCityIndex, i);
-            if(distance < closestCity[i].distance()) {
+            if(furthest && distance > closestCity[i].distance() || !furthest && distance < closestCity[i].distance()) {
                 closestCity[i] = new Distance(addedCityIndex, distance);
             }
         }
