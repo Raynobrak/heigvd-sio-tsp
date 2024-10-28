@@ -14,7 +14,7 @@ public class TourBuildTools {
         return intermediateDistance1 + intermediateDistance2 - distance;
     }
 
-    // Insère la ville donné au meilleur endroit de la tournée et retourne la
+    // Insère la ville donnée au meilleur endroit de la tournée et retourne la
     // distance supplémentaire du détour.
     int insertNewCityAtBestIndex(int cityIndex, ArrayList<Integer> tourList, TspData data){
         int smallestInsertionCost = Integer.MAX_VALUE;

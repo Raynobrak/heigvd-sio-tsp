@@ -19,6 +19,7 @@ public final class RandomTour implements ObservableTspConstructiveHeuristic {
     public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
         Random rng = new Random(Analyze.RNG_SEED);
 
+        // todo : utiliser le startCityIndex
         var insertionOrder = new ArrayList<Integer>();
         for(int i = 0; i < data.getNumberOfCities(); ++i)
             insertionOrder.add(i);
