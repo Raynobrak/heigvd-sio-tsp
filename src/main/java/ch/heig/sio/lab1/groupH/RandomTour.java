@@ -41,10 +41,7 @@ public final class RandomTour implements ObservableTspConstructiveHeuristic {
             ++insertedCitiesCount;
         }
 
-        // Création du tableau final de la tournée
-        var tour = new int[tourList.size()];
-        for(int i = 0; i < tour.length; ++i)
-            tour[i] = tourList.get(i);
+        var tour = new TourBuildTools().convertTourListToArray(tourList);
 
         return new TspTour(data, tour, length);
     }
