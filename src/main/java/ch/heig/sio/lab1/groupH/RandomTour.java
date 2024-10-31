@@ -19,6 +19,7 @@ public final class RandomTour implements ObservableTspConstructiveHeuristic {
     public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
         Random rng = new Random(Analyze.RNG_SEED);
 
+        // Génération d'un ordre aléatoire mais qui commence par startCityIndex
         var insertionOrder = new ArrayList<Integer>();
         for(int i = 0; i < data.getNumberOfCities(); ++i)
             if(i != startCityIndex)
@@ -26,24 +27,18 @@ public final class RandomTour implements ObservableTspConstructiveHeuristic {
         Collections.shuffle(insertionOrder, rng);
         insertionOrder.add(0, startCityIndex);
 
-        int insertedCitiesCount = 0;
+        // Liste contenant les villes de la tournée, dans l'ordre
         var tourList = new ArrayList<Integer>();
-        int length = 0;
 
+        // Ajout séquentiel de toutes les villes, selon l'ordre d'insertion
+        int length = 0;
         for(var cityIndex : insertionOrder) {
-            // Ajout du premier sommet
-            if(insertedCitiesCount == 0) {
-                tourList.add(cityIndex);
-            }
-            else {
-                length += new TourBuildTools().insertNewCityAtBestIndex(cityIndex, tourList, data);
-                observer.update(new TraversalIterator(tourList));
-            }
-            ++insertedCitiesCount;
+            // Ajout de la ville à l'endroit minimisant le coût
+            length += new TourBuildTools().insertNewCityAtBestIndex(cityIndex, tourList, data);
+            observer.update(new TraversalIterator(tourList));
         }
 
-        var tour = new TourBuildTools().convertTourListToArray(tourList);
-
+        int[] tour = new TourBuildTools().convertTourListToArray(tourList);
         return new TspTour(data, tour, length);
     }
 }

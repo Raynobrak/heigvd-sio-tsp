@@ -5,7 +5,9 @@ import ch.heig.sio.lab1.display.TspHeuristicObserver;
 import ch.heig.sio.lab1.tsp.TspData;
 import ch.heig.sio.lab1.tsp.TspTour;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public final class ClosestInsertionTour implements ObservableTspConstructiveHeuristic {
     @Override
@@ -19,35 +21,32 @@ public final class ClosestInsertionTour implements ObservableTspConstructiveHeur
 
         var tools = new TourBuildTools();
 
-        // todo : rename
-        int[] closestCity = new int[N];
+        int[] closestCityInTour = new int[N];
         boolean[] citiesInTour = new boolean[N];
 
         var tourList = new ArrayList<Integer>();
-        int length = 0;
 
-        // Ajout du premier sommet
+        // Ajout de la première ville
         tourList.add(startCityIndex);
         citiesInTour[startCityIndex] = true;
 
-        for(int i = 0; i < data.getNumberOfCities(); ++i) {
-            if(i == startCityIndex)
-                continue;
-            closestCity[i] = tools.getClosestCityOnTour(i, data, citiesInTour, false);
-        }
+        // Au départ, la ville de la tournée la plus proche est forcément startCityIndex (vu que c'est la seule)
+        Arrays.fill(closestCityInTour, startCityIndex);
 
+        int length = 0;
         while(tourList.size() < N) {
             // Recherche de la ville hors tournée la plus proche d'une ville dans la tournée
-            var nextCity = tools.getClosestCityOfAll(data, closestCity, citiesInTour, false);
+            var nextCity = tools.getClosestCityOfAll(data, closestCityInTour, citiesInTour, false);
             citiesInTour[nextCity] = true;
 
-            // Met à jour
-            tools.updateClosestCity(nextCity, data, citiesInTour, closestCity, false);
-
+            // Ajout de la ville à l'endroit minimisant le coût
             tools.insertNewCityAtBestIndex(nextCity, tourList, data);
 
-            length += data.getDistance(nextCity, closestCity[nextCity]);
+            length += data.getDistance(nextCity, closestCityInTour[nextCity]);
             observer.update(new TraversalIterator(tourList));
+
+            // Mise à jour de la ville la plus proche à chaque ville hors-tournée
+            tools.updateClosestCity(nextCity, data, citiesInTour, closestCityInTour, false);
         }
 
         var tour = tools.convertTourListToArray(tourList);
