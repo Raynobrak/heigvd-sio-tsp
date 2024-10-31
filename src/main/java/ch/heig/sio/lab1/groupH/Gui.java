@@ -9,10 +9,10 @@ public final class Gui {
   public static void main(String[] args) {
     HeuristicComboItem[] heuristics = {
         new HeuristicComboItem("Canonical tour", new CanonicalTour()),
-            new HeuristicComboItem("Random tour", new RandomTour()),
-            new HeuristicComboItem("Closest Insertion tour", new ClosestInsertionTour()),
-            new HeuristicComboItem("Furthest Insertion tour", new FurthestInsertionTour())
-        // TODO: Add your heuristics here
+            new HeuristicComboItem("Random tour", new RandomTourBuilder()),
+            new HeuristicComboItem("Closest Insertion tour", new DistanceBasedTourBuilder(false)),
+            new HeuristicComboItem("Furthest Insertion tour", new DistanceBasedTourBuilder(true))
+            // TODO: Add your heuristics here
     };
 
     // May not work on all platforms, comment out if necessary

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public final class RandomTour implements ObservableTspConstructiveHeuristic {
+public final class RandomTourBuilder implements ObservableTspConstructiveHeuristic {
     @Override
     public TspTour computeTour(TspData data, int startCity) {
         return ObservableTspConstructiveHeuristic.super.computeTour(data, startCity);
@@ -34,11 +34,11 @@ public final class RandomTour implements ObservableTspConstructiveHeuristic {
         int length = 0;
         for(var cityIndex : insertionOrder) {
             // Ajout de la ville à l'endroit minimisant le coût
-            length += new TourBuildTools().insertNewCityAtBestIndex(cityIndex, tourList, data);
+            length += new TourBuildingUtils().insertNewCityAtBestIndex(cityIndex, tourList, data);
             observer.update(new TraversalIterator(tourList));
         }
 
-        int[] tour = new TourBuildTools().convertTourListToArray(tourList);
+        int[] tour = new TourBuildingUtils().convertTourListToArray(tourList);
         return new TspTour(data, tour, length);
     }
 }
