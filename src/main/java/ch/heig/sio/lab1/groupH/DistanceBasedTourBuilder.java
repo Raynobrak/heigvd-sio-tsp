@@ -8,10 +8,13 @@ import ch.heig.sio.lab1.tsp.TspTour;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/// Constructeur de tournée basé sur la distance
+/// Permet de construire une tournée avec une insertion "la plus proche" ou "la plus éloignée"
+/// @author Group H - Ancay Rémi, Charbonnier Lucas
 public final class DistanceBasedTourBuilder implements ObservableTspConstructiveHeuristic {
     private boolean furthestInsertion;
     public DistanceBasedTourBuilder(boolean furthestInsertion) {
-        this.furthestInsertion = furthestInsertion;
+        this.furthestInsertion = furthestInsertion; // Détermine si on veut une "Insertion la plus éloignée" ou "Insertion la plus proche"
     }
 
     @Override
@@ -21,14 +24,11 @@ public final class DistanceBasedTourBuilder implements ObservableTspConstructive
 
     @Override
     public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
-        final int N = data.getNumberOfCities();
-
-        var tools = new TourBuildingUtils();
-
-        int[] closestCityInTour = new int[N];
-        boolean[] citiesInTour = new boolean[N];
-
-        var tourList = new ArrayList<Integer>();
+        final int N = data.getNumberOfCities(); // Nombre de villes
+        var tools = new TourBuildingUtils(); // Outils pour la construction de la tournée
+        int[] closestCityInTour = new int[N]; // Ville la plus proche de chaque ville dans la tournée
+        boolean[] citiesInTour = new boolean[N]; // Villes déjà dans la tournée
+        var tourList = new ArrayList<Integer>(); // Liste des villes de la tournée
 
         // Ajout de la première ville
         tourList.add(startCityIndex);
@@ -44,9 +44,7 @@ public final class DistanceBasedTourBuilder implements ObservableTspConstructive
             citiesInTour[nextCity] = true;
 
             // Ajout de la ville à l'endroit minimisant le coût
-            tools.insertNewCityAtBestIndex(nextCity, tourList, data);
-
-            length += data.getDistance(nextCity, closestCityInTour[nextCity]);
+            length += tools.insertNewCityAtBestIndex(nextCity, tourList, data);
 
             // Mise à jour de la ville la plus proche à chaque ville hors-tournée
             tools.updateClosestCity(nextCity, data, citiesInTour, closestCityInTour);

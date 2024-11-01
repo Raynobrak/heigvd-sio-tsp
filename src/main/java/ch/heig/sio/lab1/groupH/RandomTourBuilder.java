@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+/// Constructeur de tournée aléatoire
+/// Permet de construire une tournée avec l'heuristique de la tournée aléatoire
+/// @author Group H - Ancay Rémi, Charbonnier Lucas
 public final class RandomTourBuilder implements ObservableTspConstructiveHeuristic {
     @Override
     public TspTour computeTour(TspData data, int startCity) {
@@ -17,7 +20,7 @@ public final class RandomTourBuilder implements ObservableTspConstructiveHeurist
 
     @Override
     public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
-        Random rng = new Random(Analyze.RNG_SEED);
+        Random rng = new Random(Analyze.RNG_SEED); // Générateur de nombres aléatoires
 
         // Génération d'un ordre aléatoire mais qui commence par startCityIndex
         var insertionOrder = new ArrayList<Integer>();

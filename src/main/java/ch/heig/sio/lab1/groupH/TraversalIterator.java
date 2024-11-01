@@ -4,16 +4,13 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
-  /**
-   * A traversal of the edges of the canonical tour.
-   */
-  public class TraversalIterator implements Iterator<Edge> {
-    /** Number of cities. */
-    private final int n;
-
-    /** Start of the next edge. */
-    private int i = 0;
-    private ArrayList<Integer> cities;
+/// Itérateur pour parcourir les arêtes d'une tournée
+/// Permet de parcourir les arêtes d'une tournée de manière circulaire
+/// @author Group H - Ancay Rémi, Charbonnier Lucas
+  public class TraversalIterator implements Iterator<Edge> { 
+    private final int n; // Nombre de villes
+    private int i = 0; // Indice de la ville actuelle
+    private ArrayList<Integer> cities; // Liste des villes de la tournée
 
     TraversalIterator(ArrayList<Integer> cities) {
         this.n = cities.size();
