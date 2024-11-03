@@ -37,7 +37,6 @@ public class TourBuildingUtils {
         int currentBestInsertionIndex = Integer.MAX_VALUE; // Index de la meilleure insertion
         int insertedCitiesCount = tourList.size(); // Nombre de villes déjà insérées
 
-        // todo : changer ce parcours par un itérateur sur tourList
         for(int current = 0; current < insertedCitiesCount; ++current) {
             int next = (current + 1) % insertedCitiesCount;
 
@@ -49,7 +48,7 @@ public class TourBuildingUtils {
         }
 
         // Si la tournée est vide, on insère la ville à l'index 0
-        if(insertedCitiesCount == 0){
+        if(insertedCitiesCount == 0) {
             currentBestInsertionIndex = 0;
             smallestInsertionCost = 0;
         }

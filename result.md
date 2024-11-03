@@ -2,6 +2,8 @@
 
 ## Performance des heuristiques
 
+Ci-dessous, la performance de chaque heuristique que nous avons implémenté sur chaque dataset. Les nombres affichés correspondent à la longueur de la tournée trouvé par l'heuristique.
+
 ### pcb442
 
 | Méthode             | Min   | Max   | Moyenne | Optimal | Écart relatif (%) | Écart-type      |
@@ -55,6 +57,6 @@
 On peut voir que sur tout les sets de données, la méthode de construction de tour par l'heristique **« Insertion la plus éloignée »** est la plus performante. Elle a l'écart relatif le plus faible et donc ses résultats sont les plus proches de l'optimal.
 Nous avons ensuite la méthode de construction de tour par l'heristique **« Insertion la plus proche »** qui est la moins performante et finalement la méthode de construction de tour **aléatoire** qui se situe juste après la méthode de l'insertion la plus éloignée.
 
-Globallement, les résultats sont très proches de l'optimal, ce qui est très satisfaisant.
+Globalement, les résultats sont très proches de l'optimal, ce qui est très satisfaisant.
 
 On note aussi que bien que la méthode de l'insertion la plus éloignée soit la plus performante, elle est aussi celle avec le plus grand écart-type. Aussi, toutes les méthodes ont un temps d'exécution très similaire, ce qui est très intéressant.
